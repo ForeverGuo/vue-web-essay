@@ -1,5 +1,5 @@
 {
-  "name": "hello-world",
-  "description": "hello-world",
-  "main": "./HelloWorld.js"
+    "name": "hello-world",
+    "description": "HelloWorld",
+    "main": "./HelloWorld"
 }

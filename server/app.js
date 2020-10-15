@@ -14,7 +14,7 @@ const history = require("connect-history-api-fallback");
 function setCustomCacheControl(res, path) {
   let excludeReg = [/service-worker\.js$/, /index\.html$/];
   //不缓存的页面
-  if (excludeReg.some(v => v.test(path))) {
+  if (excludeReg.some((v) => v.test(path))) {
     // Custom Cache-Control for HTML files
     res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     res.setHeader("Pragma", "no-cache");
@@ -42,7 +42,7 @@ app.use(
   })
 );
 
-app.listen(process.env.POST, "0.0.0.0", function(err) {
+app.listen(process.env.POST, "0.0.0.0", function (err) {
   if (err) {
     console.info(err);
     return;

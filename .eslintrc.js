@@ -67,7 +67,7 @@ module.exports = {
       }
     ],
     "vue/no-unused-vars": "warn",
-    "vue/html-self-closing": 'off',
+    "vue/html-self-closing": "off",
     "array-callback-return": "error",
     "no-lone-blocks": 2,
     eqeqeq: 2,

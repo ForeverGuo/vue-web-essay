@@ -2,7 +2,7 @@ import axios from "axios";
 
 let myAxios = axios.create();
 // 查询数据列表公用方法 get
-export const get = function(url, val, config = {}) {
+export const get = function (url, val, config = {}) {
   return myAxios.get(url, {
     params: val,
     ...config,
@@ -10,7 +10,7 @@ export const get = function(url, val, config = {}) {
   });
 };
 // 删除公用方法
-export const del = function(url, data, config = {}) {
+export const del = function (url, data, config = {}) {
   return myAxios.delete(url, {
     data: config.customParams
       ? { ...data, customParams: config.customParams }
@@ -19,7 +19,7 @@ export const del = function(url, data, config = {}) {
   });
 };
 
-export const post = function(url, val, config = {}) {
+export const post = function (url, val, config = {}) {
   let contentType;
 
   return myAxios.request({
@@ -36,7 +36,7 @@ export const post = function(url, val, config = {}) {
 };
 
 // 修改数据公用方法
-export const put = function(url, val, config = {}) {
+export const put = function (url, val, config = {}) {
   let contentType;
 
   return myAxios.request({
@@ -51,7 +51,7 @@ export const put = function(url, val, config = {}) {
 };
 
 // formadata post 提交数据
-export const postFormData = function(url, val, config = {}) {
+export const postFormData = function (url, val, config = {}) {
   return myAxios.request({
     url,
     data: val,

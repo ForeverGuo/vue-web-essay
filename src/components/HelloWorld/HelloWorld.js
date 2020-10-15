@@ -1,21 +1,25 @@
-import { reactive, onMounted } from "@vue/composition-api";
+import { reactive, defineComponent, inject } from "vue";
 
-const HelloWorld = ({ props: { name = 11, ...rest }, children }) => {
-  const data = reactive({
-    msg: "HelloWorld"
-  });
+const HelloWorld = defineComponent({
+  props: ["a"],
+  setup(props, { slots }) {
+    const data = reactive({
+      msg: "HelloWorld"
+    });
 
-  onMounted(() => {
-    console.info("onMounted helloWorld");
-  });
+    return () => {
+      const { a } = props;
 
-  return (
-    <div {...rest}>
-      {children}
-      {data.msg}
-      {name}
-    </div>
-  );
-};
+      return (
+        <div>
+          <p>slot(children): {slots.default()}</p>
+          <p>reative Data: {data.msg}</p>
+          <p>inject Data: {inject("user")}</p>
+          <p>props Data: {a}</p>
+        </div>
+      );
+    };
+  }
+});
 
 export default HelloWorld;

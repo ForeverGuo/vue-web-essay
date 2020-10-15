@@ -1,16 +1,15 @@
 /* eslint-disable max-len */
 import axios from "./request";
-import { Loading } from "element-ui";
+import store from "../store";
 // import router from "@/router";
 // import { getCookie } from "./cookie";
 
 let requestList = [];
-let loadingInstance;
 function requestAfter(customParams) {
   if (customParams?.notLoading) return;
   requestList.pop();
   if (requestList.length <= 0) {
-    if (loadingInstance) loadingInstance.close();
+    if (store.state.spinning) store.commit("changeSpinning");
     window.removeEventListener("keyup", preventEvent, true);
     window.removeEventListener("keydown", preventEvent, true);
   }
@@ -45,10 +44,8 @@ function requestBefore(customParams) {
     window.addEventListener("keyup", preventEvent, true);
     window.addEventListener("keydown", preventEvent, true);
   }
-  loadingInstance = Loading.service({
-    customClass: "loading-custom",
-    text: "commom.loading"
-  });
+
+  store.commit("changeSpinning");
 }
 
 function preventEvent(event) {
@@ -59,11 +56,11 @@ function preventEvent(event) {
 
 // 添加请求拦截器
 axios.interceptors.request.use(
-  function(config) {
+  function (config) {
     let customParams = {};
     // 为了防止同时有多次请求，所有只有第一次触发的请求才将之前的焦点状态存储
 
-    if (config.data.customParams) {
+    if (config?.data?.customParams) {
       config.customParams = config.data.customParams;
       customParams = config.data.customParams;
       delete config.data.customParams;
@@ -116,7 +113,7 @@ axios.interceptors.request.use(
     //     return Message.warning(e);
     //   });
   },
-  function(error) {
+  function (error) {
     requestAfter(error.config?.customParams);
     // 对请求错误做些什么
     return Promise.reject(error);
@@ -125,7 +122,7 @@ axios.interceptors.request.use(
 // 添加响应拦截器
 // 统一在window unhandledrejection事件处理未捕获的promise事件
 axios.interceptors.response.use(
-  function(response) {
+  function (response) {
     requestAfter(response.config?.customParams);
 
     let { data } = response;
@@ -160,7 +157,7 @@ axios.interceptors.response.use(
     }
     return Promise.reject(data);
   },
-  function(error) {
+  function (error) {
     requestAfter(error.config?.customParams);
 
     // 对响应错误做点什么

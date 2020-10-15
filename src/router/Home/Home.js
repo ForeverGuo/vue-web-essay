@@ -1,75 +1,59 @@
-import { reactive } from "@vue/composition-api";
+import { reactive, defineComponent } from "vue";
+import { useRouter } from "vue-router";
+import { Button, Input } from "ant-design-vue";
+import cs from "classnames";
 import HelloWorld from "components/HelloWorld";
-import HELLO from "gql/hello.graphql";
+import Link from "components/Link";
 import styles from "./Home.module.scss";
 
-const Home = (props, { root }) => {
-  let data = reactive({
-    test: 1,
-    page: 1,
-    currentSize: 20
-  });
-
-  const handleClick = async () => {
-    const { data } = await root.$apollo.query({
-      query: HELLO,
-      fetchPolicy: "no-cache"
+const Home = defineComponent({
+  provide: {
+    user: "jw"
+  },
+  setup() {
+    const router = useRouter();
+    const data = reactive({
+      aaa: 111,
+      vvv: 22221,
+      input: ""
     });
-  };
 
-  return () => (
-    <div>
-      <ApolloQuery
-        query={HELLO}
-        variables={{
-          page: data.page,
-          currentSize: data.pageSize
-        }}
-      >
-        {({ isLoading, gqlError, result, query: { fetchMore, refetch } }) => {
-          if (isLoading) return null;
-          if (gqlError) return gqlError;
+    const state = reactive({ count: 0 });
 
-          const {
-            data: { hello }
-          } = result;
+    const handleClick = () => {
+      console.info(router);
+      // eslint-disable-next-line no-plusplus
+      state.count++;
+      data.vvv = 22222222222;
+    };
 
-          return (
-            <div>
-              {hello.page}
-              <ElButton
-                onClick={() => {
-                  // data.page = 2;
-                  refetch();
-                }}
-                class={styles.home}
-              >
-                重载
-              </ElButton>
-            </div>
-          );
-        }}
-      </ApolloQuery>
+    return () => (
+      <div>
+        <Button type="danger" class={styles.home} onClick={handleClick}>
+          <div>
+            {state.count % 2 === 0 ? (
+              <p>
+                count: {state.count} {data.aaa}
+              </p>
+            ) : null}
+          </div>
+        </Button>
 
-      <ElInput vModel={data.test}></ElInput>
-      <ElButton onClick={handleClick} class={styles.home}>
-        点击
-      </ElButton>
-      <HelloWorld name="ddd" title="111" type="222" data-id="1">
-        <div class={styles.footer}>
-          <ElButton>确定</ElButton>
-        </div>
-      </HelloWorld>
-    </div>
-  );
-};
+        {data.input}
 
-Home.props = {
-  test: {
-    type: Number,
-    descrpition: "",
-    default: 111
+        <Input
+          v-show={data.aaa === 111}
+          v-model={data.input}
+          prefix="￥"
+          suffix="RMB"
+        ></Input>
+        <HelloWorld a={data.vvv}>1122</HelloWorld>
+        <Link to="/sssasas" class={cs(styles.testLink, styles.testLink111)}>
+          Links
+        </Link>
+      </div>
+    );
   }
-};
+});
 
 export default Home;
